@@ -52,10 +52,3 @@ Cada carpeta contiene los archivos fuente en **VHDL** y otros recursos utilizado
 ## 👨‍💻 Profesor
 
 **Nicolas Alvarez** 
-
-📍 Guayaquil, Ecuador  
-📧 [jariver1986@gmail.com](mailto:jariver1986@gmail.com)  
-🔗 [GitHub: jariver1986](https://github.com/jariver1986)
-
----
-
