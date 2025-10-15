@@ -1,0 +1,36 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+-- Declaracion de entidad
+entity mux1b_tb is
+end;
+
+-- Cuerpo de arquitectura
+architecture mux1b_tb_arq of mux1b_tb is
+    -- Parte declarativa
+
+	signal a_tb : std_logic := '0';
+	signal b_tb : std_logic := '0';
+	signal sel_tb: std_logic := '0';
+	signal s_tb : std_logic;
+	
+begin
+    -- Parte descriptiva
+	a_tb  <= not a_tb after 20 ns;
+	b_tb  <= not b_tb after 40 ns;
+	sel_tb <= not sel_tb after 80 ns;
+	
+	
+	mux1b_inst: entity work.mux1b
+		port map(
+			a_i  => a_tb,
+			b_i  => b_tb,
+			sel_i => sel_tb,
+			s_o  => s_tb
+			
+		);
+
+end;
+
+
+--

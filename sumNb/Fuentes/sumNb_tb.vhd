@@ -1,0 +1,53 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+entity sumNb_tb is
+end;
+
+architecture sumNb_tb_arq of sumNb_tb is
+    -- Constante del ancho de palabra
+    constant N_tb : natural := 5;
+
+    -- Señales de prueba
+    signal a_tb  : std_logic_vector(N_tb-1 downto 0) := "00011"; -- 3
+    signal b_tb  : std_logic_vector(N_tb-1 downto 0) := "00101"; -- 5
+    signal ci_tb : std_logic := '0';
+    signal s_tb  : std_logic_vector(N_tb-1 downto 0);
+    signal co_tb : std_logic;
+begin
+    -- Instancia del DUT (Device Under Test)
+    sumNb_inst: entity work.sumNb
+        generic map(
+            N => N_tb
+        )
+        port map(
+            a_i  => a_tb,
+            b_i  => b_tb,
+            ci_i => ci_tb,
+            s_o  => s_tb,
+            co_o => co_tb
+        );
+
+    -- Proceso de estímulos
+    stim_proc: process
+    begin
+        -- Caso 1: 3 + 5 = 8
+        a_tb <= "00011"; b_tb <= "00101"; ci_tb <= '0';
+        wait for 20 ns;
+
+        -- Caso 2: 15 + 1 = 16
+        a_tb <= "01111"; b_tb <= "00001"; ci_tb <= '0';
+        wait for 20 ns;
+
+        -- Caso 3: 10 + 5 + 1 = 16
+        a_tb <= "01010"; b_tb <= "00101"; ci_tb <= '1';
+        wait for 20 ns;
+
+        -- Caso 4: Overflow
+        a_tb <= "11111"; b_tb <= "00001"; ci_tb <= '0';
+        wait for 20 ns;
+
+        -- Fin de simulación
+        wait;
+    end process;
+end;

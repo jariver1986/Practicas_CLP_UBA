@@ -1,0 +1,36 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+-- Declaración de entidad
+entity sumNb is
+    generic (N : natural := 4);  -- número de bits
+    port(
+        a_i   : in  std_logic_vector(N-1 downto 0);
+        b_i   : in  std_logic_vector(N-1 downto 0);
+        ci_i  : in  std_logic;   -- acarreo de entrada global
+        s_o   : out std_logic_vector(N-1 downto 0);
+        co_o  : out std_logic    -- acarreo de salida global
+    );
+end;
+
+architecture sumNb_arq of sumNb is
+
+    signal aux: std_logic_vector(N downto 0 );
+    
+begin
+    
+    sumNb_gen: for i in 0 to N-1 generate
+        sum1b_inst: entity work.sum1b
+            port map(
+                a_i  => a_i(i),
+                b_i  => b_i(i),
+                ci_i => aux(i),
+                s_o  => s_o(i),
+                co_o => aux(i+1)
+            );
+    end generate;
+
+    -- Acarreo de salida
+	aux(0) <= ci_i;
+    co_o <= aux(N);
+end;

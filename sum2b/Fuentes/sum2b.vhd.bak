@@ -1,0 +1,47 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+-- Declaracion de entidad
+entity sum2b is
+    port(
+        a_i  : in  std_logic_vector (1 downto 0);  
+        b_i  : in  std_logic_vector (1 downto 0);  
+        ci_i : in  std_logic;
+        s_o  : out std_logic_vector (1 downto 0); 
+        co_o : out std_logic 
+    );
+end;
+
+-- Cuerpo de arquitectura
+architecture sum2b_arq of sum2b is
+
+	signal c_aux: std_logic;
+	
+begin
+
+	sum1b_0: entity work.sum1b
+		port map(
+			a_i => a_i(0),
+			b_i => b_i(0),
+			ci_i => ci_i,
+			s_o => s_o(0),
+			co_o => c_aux
+			
+		);
+	
+	sum1b_1: entity work.sum1b
+		port map(
+			a_i => a_i(0),
+			b_i => b_i(0),
+			ci_i => c_aux,
+			s_o => s_o(0),
+			co_o => co_o
+			
+		);	
+		
+		
+    
+end;

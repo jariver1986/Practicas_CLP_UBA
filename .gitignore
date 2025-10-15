@@ -1,0 +1,36 @@
+cat > .gitignore << 'EOF'
+# ===== Herramientas EDA (Vivado/ModelSim/Questa) =====
+# ModelSim / Questa
+work/
+transcript
+vsim.wlf
+modelsim.ini
+*.mpf
+*.wlf
+*.mti
+# Vivado / Vitis / IP cache
+*.log
+*.jou
+*.str
+*.pb
+*.cache/
+*.hw/
+*.ip_user_files/
+*.sim/
+*.srcs/**/bd/**/.hw/*
+*.xpr
+*.runs/
+*.data/
+*.dsw
+*.dcp
+# Archivos temporales y de sistema
+.DS_Store
+Thumbs.db
+# IDEs
+.vscode/
+.idea/
+# Compilados u otros temporales
+*.zip
+*.tar
+*.tar.gz
+EOF

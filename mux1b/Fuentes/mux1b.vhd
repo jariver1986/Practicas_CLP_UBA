@@ -1,0 +1,24 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+-- Declaracion de entidad
+entity mux1b is
+    port(
+        a_i   : in  std_logic;  -- bit A
+        b_i   : in  std_logic;  -- bit B
+        sel_i : in  std_logic;  -- 
+        s_o : out std_logic  -- 
+        
+    );
+end;
+
+-- Cuerpo de arquitectura
+architecture mux1b_arq of mux1b is
+begin
+    -- Suma y acarreo (lógica booleana clásica)
+    s_o  <= (a_i and sel_i ) or (b_i and (not sel_i));
+    
+end;

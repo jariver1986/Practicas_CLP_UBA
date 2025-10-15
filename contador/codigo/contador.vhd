@@ -1,0 +1,73 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity counter2 is
+  generic(
+    N : integer range 1 to 4 := 4   -- módulo del contador (1..4)
+  );
+  port(
+    clk  : in  std_logic;
+    rst  : in  std_logic;
+    ena  : in  std_logic;
+    q    : out std_logic_vector(1 downto 0); -- cuenta actual
+    tick : out std_logic                      -- pulso 1 ciclo cada N
+  );
+end entity;
+
+architecture rtl of counter2 is
+  -- registros (hechos con ffd)
+  signal q1, q0 : std_logic := '0';
+
+  -- suma q + 1 (usando sum1b en ripple)
+  signal s0, s1 : std_logic;
+  signal c0     : std_logic;
+
+  -- mux para ?cargar? el +1 o mantener el valor cuando ena='0'
+  signal d0, d1 : std_logic;
+
+  -- vector interno para la cuenta (evita leer el puerto 'out')
+  signal q_i : std_logic_vector(1 downto 0);
+begin
+  -- ========== SUMA +1 ==========
+  -- LSB: (q0 + 1)
+  add0: entity work.sum1b
+    port map(
+      a_i  => q0,
+      b_i  => '1',     -- +1
+      ci_i => '0',
+      s_o  => s0,
+      co_o => c0
+    );
+
+  -- MSB: (q1 + carry)
+  add1: entity work.sum1b
+    port map(
+      a_i  => q1,
+      b_i  => '0',
+      ci_i => c0,
+      s_o  => s1,
+      co_o => open
+    );
+
+  -- ========= MUX de habilitación (ena) =========
+  d0 <= s0 when ena = '1' else q0;
+  d1 <= s1 when ena = '1' else q1;
+
+  -- ========= REGISTROS (FFD) =========
+  ff0: entity work.ffd
+    port map(clk_i => clk, rst_i => rst, ena_i => '1', d_i => d0, q_o => q0);
+
+  ff1: entity work.ffd
+    port map(clk_i => clk, rst_i => rst, ena_i => '1', d_i => d1, q_o => q1);
+
+  -- ========= Salida de cuenta (interna y a puerto) =========
+  q_i <= q1 & q0;
+  q   <= q_i;
+
+  -- ========= Generador de pulso cada N =========
+  -- tick = '1' exactamente cuando la cuenta llega a N-1 (un ciclo)
+  tick <= '1'
+    when (to_integer(unsigned(q_i)) = N-1) and (ena = '1')
+    else '0';
+end architecture;
